@@ -1,82 +1,52 @@
 package jv.triersistemas.primeiro_projeto.controller;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import jv.triersistemas.primeiro_projeto.dto.TarefaDto;
+import jv.triersistemas.primeiro_projeto.service.TarefaService;
 
 @RestController
-@RequestMapping("/tarefa-controller")
+@RequestMapping("/tarefas")
 public class TarefaController {
 
-	private static List<Tarefa> tarefas = new ArrayList<>();
-	Integer contador = 0;
-
-	@GetMapping("/get-all")
-	public List<Tarefa> getAll() {
-		return tarefas;
+	@Autowired
+	private TarefaService tarefaService;
+	
+	@GetMapping
+	public List<TarefaDto> getAll() {
+		return tarefaService.getAll();
 	}
 
-	@GetMapping("/get-by-id")
-	public Tarefa getById(@RequestBody Integer id) {
-		return tarefas.stream()
-		.filter(tarefa -> id == tarefa.getId())
-		.findAny()
-		.orElse(null);
+	@GetMapping("/get/{id}")
+	public Optional<TarefaDto> getById(@PathVariable("id") Long id) {
+		return tarefaService.getById(id);
 	}
 
-	@PostMapping("/cadastra-tarefa")
-	public void cadastraTarefa(@RequestBody Tarefa tarefa) {
-		contador += 1;
-		tarefa.defineId(contador);
-		tarefas.add(tarefa);
+	@PostMapping("/cadastrar")
+	public TarefaDto cadastraTarefa(@RequestBody TarefaDto tarefa) {
+		return tarefaService.cadastraTarefa(tarefa);
 	}
 	
-	@PutMapping("/edita-tarefa")
-	public void editaTarefa(@RequestBody Tarefa tarefa) {
-		tarefas.set((tarefas.indexOf(tarefas.stream()
-				.filter(item -> tarefa.getId() == item.getId())
-				.findAny()
-				.orElse(null))), tarefa);
+	@PutMapping("/edit/{id}")
+	public TarefaDto editaTarefa(@PathVariable("id")Long id, @RequestBody TarefaDto tarefa) {
+		return tarefaService.editaTarefa(id, tarefa);
 	}
 
-	@DeleteMapping("/deleta-tarefa")
-	public void deletaTarefa(@RequestBody Integer id) {
-		tarefas.remove(
-				tarefas.indexOf
-				(tarefas.stream()
-				.filter(item -> id == item.getId())
-				.findAny()
-				.orElse(null)));
+	@DeleteMapping("/delete/{id}")
+	public void deletaTarefa(@PathVariable("id") Long id) {
+		tarefaService.deletaTarefa(id);
 	}
-}
-
-@NoArgsConstructor
-@Getter
-class Tarefa {
 	
-	private long id;
-	private String titulo;
-	private String descricao;
-	private boolean completa;
-
-	public Tarefa(String titulo, String descricao, boolean completa) {
-		super();
-		this.titulo = titulo;
-		this.descricao = descricao;
-		this.completa = completa;
-	}
-
-	protected void defineId(int id) {
-		this.id = id;
-	}
+	
 }
