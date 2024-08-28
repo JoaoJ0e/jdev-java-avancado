@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jv.triersistemas.primeiro_projeto.dto.ErrorResponseDto;
 import jv.triersistemas.primeiro_projeto.dto.TarefaDto;
 import jv.triersistemas.primeiro_projeto.service.TarefaService;
 
@@ -29,8 +31,12 @@ public class TarefaController {
 	}
 
 	@GetMapping("/get/{id}")
-	public Optional<TarefaDto> getById(@PathVariable("id") Long id) {
-		return tarefaService.getById(id);
+	public ResponseEntity<?> getById(@PathVariable("id") Long id) {
+		try {
+			return ResponseEntity.ok(tarefaService.getById(id));
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(new ErrorResponseDto(e.getMessage()));
+		}
 	}
 
 	@PostMapping("/cadastrar")
@@ -39,8 +45,12 @@ public class TarefaController {
 	}
 	
 	@PutMapping("/edit/{id}")
-	public TarefaDto editaTarefa(@PathVariable("id")Long id, @RequestBody TarefaDto tarefa) {
-		return tarefaService.editaTarefa(id, tarefa);
+	public ResponseEntity<?> editaTarefa(@PathVariable("id")Long id, @RequestBody TarefaDto tarefa) {
+		try {
+			return tarefaService.editaTarefa(id, tarefa);			
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(new ErrorResponseDto(e.getMessage()));
+		}
 	}
 
 	@DeleteMapping("/delete/{id}")
