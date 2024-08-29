@@ -32,18 +32,23 @@ public class TarefaServiceImpl implements TarefaService {
 	public TarefaDto getById(Long id) {
 		return new TarefaDto(repository.findById(id).orElseThrow( () -> new NullPointerException("ID não encontrado")));
 	}
-
+ 
+	// ================================================================================
+	
+	private CategoriaEntity getCategoriaEntityById(TarefaDto dto) {
+		return new CategoriaEntity(categoriaService.getById(dto.getCategoriaId()));
+	}
+	// ================================================================================
+	
 	@Override
 	public TarefaDto cadastraTarefa(TarefaDto novaTarefaDto) {
 		
-		TarefaEntity entidadePersistida = new TarefaEntity();		
+		TarefaEntity novaTarefaEntity = new TarefaEntity(novaTarefaDto, getCategoriaEntityById(novaTarefaDto));		
 		
-		entidadePersistida
-		.atualizaTarefa(novaTarefaDto, getCategoriaEntityById(novaTarefaDto));
-		
-		return new TarefaDto(repository.save(entidadePersistida));
+		return new TarefaDto(repository.save(novaTarefaEntity));
 	}
 
+	// ================================================================================
 	public TarefaDto atualizaTarefa(Long id, TarefaDto tarefaAtualizada) {
 	
 		Optional<TarefaEntity> tarefaEntity = repository.findById(id);
@@ -71,9 +76,6 @@ public class TarefaServiceImpl implements TarefaService {
 		repository.deleteAll();
 	}
 	
-	public CategoriaEntity getCategoriaEntityById(TarefaDto dto) {
-		return new CategoriaEntity(categoriaService.getById(dto.getCategoriaId()));
-	}
 	
 }
 
