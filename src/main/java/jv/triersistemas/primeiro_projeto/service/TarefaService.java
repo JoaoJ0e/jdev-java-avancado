@@ -1,9 +1,6 @@
 package jv.triersistemas.primeiro_projeto.service;
 
 import java.util.List;
-import java.util.Optional;
-
-import org.springframework.http.ResponseEntity;
 
 import jv.triersistemas.primeiro_projeto.dto.TarefaDto;
 
@@ -15,8 +12,10 @@ public interface TarefaService {
 	
 	TarefaDto cadastraTarefa(TarefaDto tarefa);
 	
-	ResponseEntity<?> editaTarefa(Long id, TarefaDto tarefa);
+	TarefaDto atualizaTarefa(Long id, TarefaDto tarefa);
 	
 	void deletaTarefa(Long id);
+
+	void deletaTudo();
 	
 }

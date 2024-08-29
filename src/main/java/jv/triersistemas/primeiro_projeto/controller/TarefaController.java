@@ -1,7 +1,6 @@
 package jv.triersistemas.primeiro_projeto.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -45,17 +44,18 @@ public class TarefaController {
 	}
 	
 	@PutMapping("/edit/{id}")
-	public ResponseEntity<?> editaTarefa(@PathVariable("id")Long id, @RequestBody TarefaDto tarefa) {
-		try {
-			return tarefaService.editaTarefa(id, tarefa);			
-		} catch (Exception e) {
-			return ResponseEntity.badRequest().body(new ErrorResponseDto(e.getMessage()));
-		}
+	public TarefaDto editaTarefa(@PathVariable("id")Long id, @RequestBody TarefaDto tarefa) {
+			return tarefaService.atualizaTarefa(id, tarefa);			
 	}
 
 	@DeleteMapping("/delete/{id}")
 	public void deletaTarefa(@PathVariable("id") Long id) {
 		tarefaService.deletaTarefa(id);
+	}
+	
+	@DeleteMapping("/delete/all")
+	public void deletaTudo() {
+		tarefaService.deletaTudo();
 	}
 	
 	
