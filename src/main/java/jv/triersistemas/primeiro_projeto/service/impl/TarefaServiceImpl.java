@@ -67,22 +67,11 @@ public class TarefaServiceImpl implements TarefaService {
 		
 		return ResponseEntity.ok(new TarefaDto(tarefaEntity));
 		
-		/*
-		Optional<TarefaDto> busca = getById(id);
-
-		if (busca.isPresent()) {
-			busca.get().setTitulo(tarefa.getTitulo());
-			busca.get().setDescricao(tarefa.getDescricao());
-			busca.get().setCompleta(tarefa.getCompleta());
-			return busca.get();
-		}
-		return null;
-		*/
 	}
 
 	@Override
 	public void deletaTarefa(@PathVariable("id") Long id) {
-		tarefas.removeIf(t -> t.getId().equals(id));
+		repository.deleteById(id);
 	}
 
 }
