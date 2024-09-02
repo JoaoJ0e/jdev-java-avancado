@@ -10,6 +10,8 @@ public interface TarefaService {
 	
 	TarefaDto getById(Long id);
 	
+	List<TarefaDto> listarTarefasIncompletasPorCategoria(Long id);
+	
 	TarefaDto cadastraTarefa(TarefaDto tarefa);
 	
 	TarefaDto atualizaTarefa(Long id, TarefaDto tarefa);

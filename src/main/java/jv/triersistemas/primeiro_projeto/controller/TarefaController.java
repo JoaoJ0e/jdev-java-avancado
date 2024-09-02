@@ -38,6 +38,11 @@ public class TarefaController {
 		}
 	}
 
+	@GetMapping("/getIncompletas")
+	public List<TarefaDto> listarTarefasIncompletasPorCategoria(Long id) {
+		return tarefaService.listarTarefasIncompletasPorCategoria(id);
+	}
+	
 	@PostMapping("/cadastrar")
 	public TarefaDto cadastraTarefa(@RequestBody TarefaDto tarefa) {
 		return tarefaService.cadastraTarefa(tarefa);
